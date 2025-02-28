@@ -1,57 +1,79 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const HF_API_KEY = "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";  // Replace with your API key
-
 const App = () => {
-  const [messages, setMessages] = useState([]);
-  const [userInput, setUserInput] = useState("");
+  const [text, setText] = useState(""); // For storing the recognized text
+  const [response, setResponse] = useState(""); // For storing the chatbot's response
+  const [isListening, setIsListening] = useState(false); // To track if speech is being recognized
 
-  const sendMessage = async () => {
-    if (!userInput.trim()) return;
+  const HF_API_KEY = "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";
 
-    const newMessages = [...messages, { sender: "User", text: userInput }];
-    setMessages(newMessages);
-    setUserInput("");
+  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognition.continuous = false;
+  recognition.lang = "en-US";
+  recognition.interimResults = false;
 
+  const startListening = () => {
+    recognition.start();
+    setIsListening(true);
+
+    recognition.onresult = async (event) => {
+      const speechText = event.results[0][0].transcript;
+      setText(speechText); // Update text with recognized speech
+
+      const chatResponse = await getChatbotResponse(speechText); // Get response from chatbot
+      setResponse(chatResponse); // Display chatbot response
+      speakText(chatResponse); // Speak the response aloud
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech Recognition Error:", event.error);
+    };
+  };
+
+  const stopListening = () => {
+    recognition.stop();
+    setIsListening(false);
+  };
+
+  const getChatbotResponse = async (userInput) => {
     try {
       const response = await axios.post(
-        "https://api-inference.huggingface.co/models/gpt2",
+        "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium",
         { inputs: userInput },
         {
           headers: {
             Authorization: `Bearer ${HF_API_KEY}`,
-            "Content-Type": "application/json",
           },
         }
-      );      
-
-      const botMessage = response.data[0].generated_text;
-      setMessages([...newMessages, { sender: "AI", text: botMessage }]);
-
+      );
+      return response.data[0].generated_text; // Return the chatbot's response
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error fetching chatbot response:", error);
+      return "Sorry, I couldn't process your request.";
     }
+  };
+
+  const speakText = (text) => {
+    const msg = new SpeechSynthesisUtterance(text);
+    msg.lang = "en-US"; // Set language
+    window.speechSynthesis.speak(msg); // Speak the text
   };
 
   return (
     <div style={{ maxWidth: "500px", margin: "auto", textAlign: "center" }}>
-      <h1>AI Chatbot</h1>
-      <div style={{ height: "300px", overflowY: "scroll", border: "1px solid gray", padding: "10px" }}>
-        {messages.map((msg, index) => (
-          <p key={index} style={{ textAlign: msg.sender === "User" ? "right" : "left" }}>
-            <strong>{msg.sender}:</strong> {msg.text}
-          </p>
-        ))}
+      <h1>Audio-to-Audio Chatbot</h1>
+      <button onClick={isListening ? stopListening : startListening}>
+        {isListening ? "Stop Listening" : "Start Listening"}
+      </button>
+      <div>
+        <h2>User Input:</h2>
+        <p>{text}</p>
       </div>
-      <input
-        type="text"
-        value={userInput}
-        onChange={(e) => setUserInput(e.target.value)}
-        placeholder="Ask something..."
-        style={{ width: "80%", padding: "10px", marginTop: "10px" }}
-      />
-      <button onClick={sendMessage} style={{ padding: "10px", marginLeft: "5px" }}>Send</button>
+      <div>
+        <h2>Chatbot Response:</h2>
+        <p>{response}</p>
+      </div>
     </div>
   );
 };
