@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import './App.css';
+import logo from './logo.svg';
 
 const App = () => {
   const [text, setText] = useState(""); // For storing the recognized text
@@ -58,11 +60,15 @@ const App = () => {
     const msg = new SpeechSynthesisUtterance(text);
     msg.lang = "en-US"; // Set language
     window.speechSynthesis.speak(msg); // Speak the text
+    setIsListening(false); // Stop listening after speaking
   };
 
   return (
-    <div style={{ maxWidth: "500px", margin: "auto", textAlign: "center" }}>
-      <h1>Audio-to-Audio Chatbot</h1>
+    <div className="App">
+    <header className="App-header">
+      <img src={logo} className="App-logo" alt="logo" />
+      <div style={{ maxWidth: "500px", margin: "auto", textAlign: "center" }}>
+      <h1>Text/Audio Chatbot</h1>
       <button onClick={isListening ? stopListening : startListening}>
         {isListening ? "Stop Listening" : "Start Listening"}
       </button>
@@ -74,6 +80,62 @@ const App = () => {
         <h2>Chatbot Response:</h2>
         <p>{response}</p>
       </div>
+    </div>
+      <p>
+        <span>About this website:</span> built with&nbsp; 
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+         React
+      </a>,&nbsp; 
+      <a
+          className="App-link"
+          href="https://huggingface.co/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+         Hugging face API
+      </a>&nbsp;
+      <a
+          className="App-link"
+          href="https://huggingface.co/openai-community/gpt2"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+         (GPT-2)
+      </a>
+      ,&nbsp;
+      <a
+          className="App-link"
+          href="https://vercel.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+         Vercel
+      </a>,&nbsp;
+      <a
+          className="App-link"
+          href="https://github.com/IrvinDale/ai-chatbot"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+         GitHub source code
+      </a>
+
+      </p>
+ 
+      
+      
+    </header>
+
+    <footer className="App-footer">
+      <small>
+        &copy; 2025 Irvin Dale. All rights reserved.
+      </small>
+    </footer>
     </div>
   );
 };
