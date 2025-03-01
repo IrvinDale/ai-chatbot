@@ -7,6 +7,7 @@ const App = () => {
   const [text, setText] = useState(""); // For storing the recognized text
   const [response, setResponse] = useState(""); // For storing the chatbot's response
   const [isListening, setIsListening] = useState(false); // To track if speech is being recognized
+  const [errorMessage, setErrorMessage] = useState(""); // new state for error message
 
   const apiKey = process.env.REACT_APP_HF_API_KEY; // Get Hugging Face API key from environment variables
 
@@ -30,6 +31,7 @@ const App = () => {
 
     recognition.onerror = (event) => {
       console.error("Speech Recognition Error:", event.error);
+      setErrorMessage(`Error: ${event.error}`); // Display the error message in the UI
     };
   };
 
@@ -57,6 +59,9 @@ const App = () => {
   };
 
   const speakText = (text) => {
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel(); // Stop previous speech before speaking new text
+    }
     const msg = new SpeechSynthesisUtterance(text);
     msg.lang = "en-US"; // Set language
     window.speechSynthesis.speak(msg); // Speak the text
@@ -68,10 +73,11 @@ const App = () => {
     <header className="App-header">
       <img src={logo} className="App-logo" alt="logo" />
       <div className="App-content">
-      <h1>React App Audio Chatbot using GPT-2</h1>
+      <h1>React App Audio Chatbot using DiabloGPT</h1>
       <button onClick={isListening ? stopListening : startListening}>
         {isListening ? "Stop Listening" : "Start Listening"}
       </button>
+      {isListening && <p>Listening...</p>}
       <div>
         <h2>User Input:</h2>
         <p>{text}</p>
@@ -79,6 +85,7 @@ const App = () => {
       <div>
         <h2>Chatbot Response:</h2>
         <p>{response}</p>
+        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
       </div>
     </div>
       
@@ -110,11 +117,11 @@ const App = () => {
       </a>&nbsp;
       <a
           className="App-link"
-          href="https://huggingface.co/openai-community/gpt2"
+          href="https://huggingface.co/microsoft/DialoGPT-medium"
           target="_blank"
           rel="noopener noreferrer"
         >
-         (GPT-2)
+         (DiabloGPT)
       </a>
       ,&nbsp;
       <a
