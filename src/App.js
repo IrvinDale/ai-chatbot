@@ -67,8 +67,8 @@ const App = () => {
     <div className="App">
     <header className="App-header">
       <img src={logo} className="App-logo" alt="logo" />
-      <div style={{ maxWidth: "500px", margin: "auto", textAlign: "center" }}>
-      <h1>React App Text/Audio Chatbot</h1>
+      <div className="App-content">
+      <h1>React App Audio Chatbot using GPT-2</h1>
       <button onClick={isListening ? stopListening : startListening}>
         {isListening ? "Stop Listening" : "Start Listening"}
       </button>
@@ -81,6 +81,15 @@ const App = () => {
         <p>{response}</p>
       </div>
     </div>
+      
+      
+      
+    </header>
+
+    <footer className="App-footer">
+      <small>
+        &copy; 2025 Irvin Dale. All rights reserved.
+      </small>
       <p>
         <span>About this website:</span> built with&nbsp; 
         <a
@@ -127,14 +136,6 @@ const App = () => {
 
       </p>
  
-      
-      
-    </header>
-
-    <footer className="App-footer">
-      <small>
-        &copy; 2025 Irvin Dale. All rights reserved.
-      </small>
     </footer>
     </div>
   );

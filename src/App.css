@@ -24,6 +24,11 @@
   color: white;
 }
 
+.App-content {
+  max-width: "500px";
+   text-align: "center";
+}
+
 .App-footer {
   background-color: #282c34;
   min-height: 10vh;
