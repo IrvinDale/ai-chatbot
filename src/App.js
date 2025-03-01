@@ -68,7 +68,7 @@ const App = () => {
     <header className="App-header">
       <img src={logo} className="App-logo" alt="logo" />
       <div style={{ maxWidth: "500px", margin: "auto", textAlign: "center" }}>
-      <h1>Text/Audio Chatbot</h1>
+      <h1>React App Text/Audio Chatbot</h1>
       <button onClick={isListening ? stopListening : startListening}>
         {isListening ? "Stop Listening" : "Start Listening"}
       </button>
