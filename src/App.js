@@ -6,7 +6,7 @@ const App = () => {
   const [response, setResponse] = useState(""); // For storing the chatbot's response
   const [isListening, setIsListening] = useState(false); // To track if speech is being recognized
 
-  const HF_API_KEY = "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";
+  const apiKey = process.env.REACT_APP_HF_API_KEY; // Get Hugging Face API key from environment variables
 
   const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
   recognition.continuous = false;
@@ -43,7 +43,7 @@ const App = () => {
         { inputs: userInput },
         {
           headers: {
-            Authorization: `Bearer ${HF_API_KEY}`,
+            Authorization: `Bearer ${apiKey}`,
           },
         }
       );
