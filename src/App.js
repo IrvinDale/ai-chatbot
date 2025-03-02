@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import './App.css';
-import "bootstrap/dist/css/bootstrap.min.css";
+
 
 import logo from './logo.svg';
 
