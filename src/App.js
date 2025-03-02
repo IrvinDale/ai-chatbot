@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import './App.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import logo from './logo.svg';
 
 const App = () => {
@@ -73,24 +75,25 @@ const App = () => {
     <header className="App-header">
       <img src={logo} className="App-logo" alt="logo" />
       <div className="App-content">
-      <h1>React App Audio Chatbot using DiabloGPT</h1>
-      <button onClick={isListening ? stopListening : startListening}>
-        {isListening ? "Stop Listening" : "Start Listening"}
-      </button>
+      <h1 className="m-3">React App Audio Chatbot using DiabloGPT</h1>
+    <button 
+      onClick={isListening ? stopListening : startListening} 
+      className={`btn ${isListening ? "btn-danger" : "btn-success"} m-3`}
+    >
+    <i className={`bi ${isListening ? "bi-mic-mute-fill" : "bi-mic-fill"}`}></i>
+      {isListening ? " Stop Listening" : " Start Listening"}
+    </button>
       {isListening && <p>Listening...</p>}
-      <div>
-        <h2>User Input:</h2>
+      <div className="m-3">
+        <h2 className="m-3">User Input:</h2>
         <p>{text}</p>
       </div>
       <div>
-        <h2>Chatbot Response:</h2>
+        <h2 className="m-3">Chatbot Response:</h2>
         <p>{response}</p>
         {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
       </div>
     </div>
-      
-      
-      
     </header>
 
     <footer className="App-footer">
